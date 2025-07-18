@@ -1,4 +1,4 @@
-// src/pages/leads.tsx
+
 import { useState } from "react"
 
 import BreadcrumbNav from "@/components/bread-crumb-nav"
@@ -90,7 +90,6 @@ export default function CallLogsPage() {
       <div className="p-5 border-b border-gray-300 flex justify-between items-center">
         {/* Search Inputs */}
         <div className="flex flex-row gap-3">
-          {/* ✅ Replaced First Name with Telephony Combobox */}
           <Popover open={telephonyOpen} onOpenChange={setTelephonyOpen}>
             <PopoverTrigger asChild>
               <Button

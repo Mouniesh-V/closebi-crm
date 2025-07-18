@@ -4,32 +4,15 @@ import BreadcrumbNav from "@/components/bread-crumb-nav"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
 import {
-  LinkIcon,
-  Mail,
-  Paperclip,
-  Phone,
-  UserCircle,
   Clock,
   PhoneCall,
-  BarChart3
+  BarChart3,
+  Phone
 } from "lucide-react"
 import { ProfileAccordion } from "@/components/profile-accordion"
-import { useState } from "react"
 
 export default function LeadDetails() {
   const { id } = useParams()
-  const [image, setImage] = useState<string | null>(null)
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setImage(reader.result as string)
-      }
-      reader.readAsDataURL(file)
-    }
-  }
 
   return (
     <Layout>
@@ -57,58 +40,14 @@ export default function LeadDetails() {
               </div>
             </PopoverContent>
           </Popover>
-
-          <Button size="sm">Convert to Deal</Button>
         </div>
       </div>
 
       <div className="flex flex-1 gap-2 p-2">
   {/* Left Panel */}
-  <div className="w-[35%]">
+  <div className="w-[60%]">
     <div className="border rounded-none p-4 h-[550px] bg-white shadow-sm space-y-4 overflow-y-auto">
-      {/* Title */}
-      <div className="text-lg font-semibold">CRM-LEAD-2025-00184</div>
-
-      {/* Image Upload */}
-      <div className="flex flex-col items-center gap-2">
-        <label htmlFor="avatar-upload" className="cursor-pointer">
-          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center text-sm text-muted-foreground font-medium overflow-hidden">
-            {image ? (
-              <img
-                src={image}
-                alt="Uploaded avatar"
-                className="object-cover w-full h-full"
-              />
-            ) : (
-              <UserCircle className="w-10 h-10 text-muted-foreground" />
-            )}
-          </div>
-          <input
-            type="file"
-            id="avatar-upload"
-            className="hidden"
-            accept="image/*"
-            onChange={handleImageChange}
-          />
-        </label>
-
-        <div className="text-xl font-semibold">{id ?? "08105824530"}</div>
-
-        <div className="flex gap-2 mt-2">
-          <Button variant="outline" size="icon" className="h-8 w-8">
-            <Phone className="h-4 w-4" />
-          </Button>
-          <Button variant="outline" size="icon" className="h-8 w-8">
-            <Mail className="h-4 w-4" />
-          </Button>
-          <Button variant="outline" size="icon" className="h-8 w-8">
-            <LinkIcon className="h-4 w-4" />
-          </Button>
-          <Button variant="outline" size="icon" className="h-8 w-8">
-            <Paperclip className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
+     
 
       {/* Accordion */}
       <ProfileAccordion
@@ -124,7 +63,18 @@ export default function LeadDetails() {
 
   {/* Right Panel */}
   <div className="flex-1">
+     {/* Title */}
+
+
     <div className="border rounded-none p-4 h-[550px] bg-white shadow-sm overflow-y-auto">
+     <div className="flex justify-between pb-4 border-b border-gray-200 p-1 mb-3">
+      <div className="text-lg font-semibold">CRM-LEAD-2025-00184</div>
+      <div>
+          <Button size="sm">
+          <Phone/>  Call
+          </Button>
+      </div>
+     </div>
       {/* Tabs */}
       <div className="flex space-x-8 mb-4 border-b border-gray-200 px-2">
   <NavLink
@@ -172,6 +122,7 @@ export default function LeadDetails() {
       {/* Activity Content */}
       <Outlet/>
     </div>
+
   </div>
 </div>
 
