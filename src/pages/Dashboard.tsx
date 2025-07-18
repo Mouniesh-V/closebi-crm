@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button"
 import { Layout } from "@/layout/Layout"
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
 import { useState } from "react"
+import type { SectionCardProps } from "@/components/number-card"
 
-const cardData = [
+const cardData :SectionCardProps[] = [
   { label: "Total Revenue", value: "$12,500", change: "+8.2%", changeVariant: "outline" },
   { label: "New Customers", value: "320", change: "+5.4%", changeVariant: "outline" },
   { label: "Churn Rate", value: "2.1%", change: "-0.3%", changeVariant: "default" },
@@ -13,6 +14,7 @@ const cardData = [
   { label: "Conversions", value: "1,130", change: "+3.9%", changeVariant: "outline" },
   { label: "Support Tickets", value: "87", change: "-10.5%", changeVariant: "default" }
 ]
+
 
 const tableData = [
   {
@@ -159,7 +161,7 @@ function Dashboard() {
         <div className="flex flex-col flex-1 px-6 overflow-hidden">
 
           {/* Scrollable Table */}
-          <div className="flex-1">
+          <div className="flex-1 overflow-y-auto">
             <DynamicTable rows={paginatedData} />
           </div>
 

@@ -7,11 +7,11 @@ import {
   CardTitle
 } from "./ui/card"
 
-interface SectionCardProps {
+export type SectionCardProps = {
   label: string
   value: string | number
   change: string
-  changeVariant?: "default" | "outline" | undefined
+  changeVariant?: "outline" | "default" | "secondary" | "destructive" | null | undefined
 }
 
 export const SectionCard = ({

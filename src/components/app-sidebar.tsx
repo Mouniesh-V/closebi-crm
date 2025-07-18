@@ -14,6 +14,9 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { SettingsDialog } from "./settings-dialog"
@@ -31,14 +34,13 @@ const data = {
 }
 
 type AppSidebarProps = Omit<React.ComponentProps<typeof Sidebar>, "onToggle"> & {
-  onToggle?: (collapsed: boolean) => void; // Callback to notify parent of state change
+  onToggle?: (collapsed: boolean) => void;
 };
 
 export function AppSidebar({ onToggle, ...props }: AppSidebarProps) {
   const [collapsed, setCollapsed] = React.useState(false)
   const [settingsOpen, setSettingsOpen] = React.useState(false)
 
-  // Notify parent when collapsed state changes
   React.useEffect(() => {
     onToggle?.(collapsed);
   }, [collapsed, onToggle]);
@@ -78,21 +80,35 @@ export function AppSidebar({ onToggle, ...props }: AppSidebarProps) {
               )}
             </div>
           </DropdownMenuTrigger>
+
           <DropdownMenuContent
             className="min-w-56 rounded-xl shadow-lg p-0 mt-2"
             align="start"
             sideOffset={4}
           >
             <div className="px-2 py-2">
-              <DropdownMenuItem className="flex items-center gap-2 rounded-md">
-                <Grid className="size-5" />
-                <span className="flex-1">Apps</span>
-                <ChevronRight className="size-4 ml-auto text-muted-foreground" />
-              </DropdownMenuItem>
+              {/* Nested Dropdown for Apps */}
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger className="flex items-center gap-2 rounded-md data-[state=open]:bg-accent data-[state=open]:text-accent-foreground">
+                  <Grid className="size-5" />
+                  <span className="flex-1">Apps</span>
+                  
+                </DropdownMenuSubTrigger>
+                <DropdownMenuSubContent className="min-w-40 rounded-xl shadow-md p-1">
+                  <DropdownMenuItem className="flex items-center gap-2 rounded-md">
+                    <LayoutDashboard className="size-5" />
+                    <span>Desk</span>
+                  </DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+
+              {/* Toggle Theme */}
               <DropdownMenuItem className="flex items-center gap-2 rounded-md">
                 <Moon className="size-5" />
                 <span>Toggle theme</span>
               </DropdownMenuItem>
+
+              {/* Settings */}
               <DropdownMenuItem
                 className="flex items-center gap-2 rounded-md"
                 onSelect={(e) => {
@@ -104,10 +120,14 @@ export function AppSidebar({ onToggle, ...props }: AppSidebarProps) {
                 <span>Settings</span>
               </DropdownMenuItem>
               <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
+
+              {/* About */}
               <DropdownMenuItem className="flex items-center gap-2 rounded-md">
                 <Info className="size-5" />
                 <span>About</span>
               </DropdownMenuItem>
+
+              {/* Logout */}
               <DropdownMenuSeparator className="my-2" />
               <DropdownMenuItem className="flex items-center gap-2 rounded-md text-destructive">
                 <LogOut className="size-5" />
@@ -117,6 +137,7 @@ export function AppSidebar({ onToggle, ...props }: AppSidebarProps) {
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarHeader>
+
       <SidebarContent>
         <NavMain items={navItems} collapsed={collapsed} />
         <NavSecondary

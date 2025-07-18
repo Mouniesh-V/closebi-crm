@@ -8,7 +8,7 @@ import {
   import { Button } from "@/components/ui/button";
   import { PhoneIncoming, User, Calendar, Clock, CheckCircle2} from "lucide-react";
   
-  interface CallLogItem {
+  export interface CallLogItem {
     id: number;
     caller: string;
     receiver: string;
@@ -21,7 +21,7 @@ import {
     audioUrl?: string;
   }
   
-  interface DialogViewProps {
+  export type DialogViewProps = {
     trigger: React.ReactNode;
     data: CallLogItem;
     onCreateLead?: () => void;

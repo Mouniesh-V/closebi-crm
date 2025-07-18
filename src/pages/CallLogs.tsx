@@ -12,10 +12,10 @@ import { Command, CommandInput, CommandItem, CommandList, CommandEmpty } from "@
 
 import { Layout } from "@/layout/Layout"
 import { Plus, Filter, ArrowDownUp, LayoutGrid, Check, ChevronsUpDown } from "lucide-react"
-import DialogViewCall from "@/components/dialog-view-call"
+import DialogViewCall, { type CallLogItem } from "@/components/dialog-view-call"
 import { cn } from "@/lib/utils"
 
-const callLogsData = [
+const callLogsData: CallLogItem[] = [
   {
     id: 1,
     caller: "Unknown",
@@ -50,6 +50,10 @@ const callLogsData = [
     createdOn: "3 days ago",
   },
 ]
+
+// Add index signature to CallLogItem for dynamic key access
+// (This is a type-only change, not runtime)
+type CallLogItemWithIndex = CallLogItem & { [key: string]: unknown }
 
 export default function CallLogsPage() {
   const [rowsPerPage, setRowsPerPage] = useState(10)
@@ -174,21 +178,22 @@ export default function CallLogsPage() {
           <DynamicTable
             rows={paginatedData}
             rowLinkBase=""
-            rowRenderer={(row, key) =>
-              key === "caller" ? (
+            rowRenderer={(row, key) => {
+              const typedRow = row as CallLogItemWithIndex
+              return key === "caller" ? (
                 <DialogViewCall
                   trigger={
                     <div className="hover:underline cursor-pointer font-semibold">
-                      {String(row["caller"])}
+                      {String(typedRow["caller"])}
                     </div>
                   }
-                  data={row}
-                  onCreateLead={() => console.log("Lead created for", row.id)}
+                  data={typedRow}
+                  onCreateLead={() => console.log("Lead created for", typedRow.id)}
                 />
               ) : (
-                String(row[key] ?? "")
+                String(typedRow[key] ?? "")
               )
-            }
+            }}
           />
         </div>
 
