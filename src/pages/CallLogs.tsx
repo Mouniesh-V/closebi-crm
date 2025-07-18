@@ -8,16 +8,12 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Command, CommandInput, CommandItem, CommandList, CommandEmpty } from "@/components/ui/command"
 
 import { Layout } from "@/layout/Layout"
-
-import {
-  Plus,
-  Filter,
-  ArrowDownUp,
-  LayoutGrid,
-} from "lucide-react"
+import { Plus, Filter, ArrowDownUp, LayoutGrid, Check, ChevronsUpDown } from "lucide-react"
 import DialogViewCall from "@/components/dialog-view-call"
+import { cn } from "@/lib/utils"
 
 const callLogsData = [
   {
@@ -58,6 +54,8 @@ const callLogsData = [
 export default function CallLogsPage() {
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
+  const [telephonyOpen, setTelephonyOpen] = useState(false)
+  const [selectedMedium, setSelectedMedium] = useState<string | null>(null)
 
   const totalRows = callLogsData.length
   const totalPages = Math.ceil(totalRows / rowsPerPage)
@@ -66,6 +64,8 @@ export default function CallLogsPage() {
     (currentPage - 1) * rowsPerPage,
     currentPage * rowsPerPage
   )
+
+  const telephonyOptions = ["Exotel", "Manual", "Twilio"]
 
   return (
     <Layout>
@@ -86,7 +86,46 @@ export default function CallLogsPage() {
       <div className="p-5 border-b border-gray-300 flex justify-between items-center">
         {/* Search Inputs */}
         <div className="flex flex-row gap-3">
-          <Input placeholder="First Name" className="w-40" />
+          {/* ✅ Replaced First Name with Telephony Combobox */}
+          <Popover open={telephonyOpen} onOpenChange={setTelephonyOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                role="combobox"
+                className="w-40 justify-between"
+              >
+                {selectedMedium ?? "Select Medium"}
+                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-40 p-0">
+              <Command>
+                <CommandInput placeholder="Search..." className="h-9" />
+                <CommandEmpty>No result</CommandEmpty>
+                <CommandList>
+                  {telephonyOptions.map((option) => (
+                    <CommandItem
+                      key={option}
+                      value={option}
+                      onSelect={() => {
+                        setSelectedMedium(option)
+                        setTelephonyOpen(false)
+                      }}
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          selectedMedium === option ? "opacity-100" : "opacity-0"
+                        )}
+                      />
+                      {option}
+                    </CommandItem>
+                  ))}
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+
           <Input placeholder="Phone No" className="w-40" />
         </div>
 
@@ -130,68 +169,75 @@ export default function CallLogsPage() {
       </div>
 
       <div className="flex flex-col h-[calc(100vh-150px)] px-6">
-          {/* Scrollable Table Area */}
-          <div className="flex-1 overflow-y-auto pr-2">
+        {/* Scrollable Table Area */}
+        <div className="flex-1 overflow-y-auto pr-2">
           <DynamicTable
             rows={paginatedData}
-            rowRenderer={(row) => (
-              <DialogViewCall
-                trigger={<div className="hover:bg-gray-100 cursor-pointer p-2 rounded">
-                  <div className="font-semibold">{row.caller}</div>
-                  <div className="text-sm text-muted-foreground">{row.duration}</div>
-                </div>}
-                data={row}
-                onCreateLead={() => console.log("Lead created for", row.id)} />
-            )} rowLinkBase={""}/>
-          </div>
-
-          {/* Sticky Pagination */}
-          <div className="border-t pt-4 pb-6 flex justify-between items-center bg-white sticky bottom-0 z-10">
-            {/* Left: Rows per page */}
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" size="sm">
-                  Rows: {rowsPerPage}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-32">
-                <div className="flex flex-col gap-1">
-                  {[10, 20, 50].map((count) => (
-                    <Button
-                      key={count}
-                      variant={rowsPerPage === count ? "default" : "ghost"}
-                      size="sm"
-                      onClick={() => {
-                        setRowsPerPage(count)
-                        setCurrentPage(1)
-                      }}
-                    >
-                      {count}
-                    </Button>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
-
-            {/* Right: Pagination */}
-            <div className="flex gap-1 items-center">
-              {Array.from({ length: totalPages }).map((_, index) => {
-                const page = index + 1
-                return (
-                  <Button
-                    key={page}
-                    size="sm"
-                    variant={page === currentPage ? "default" : "ghost"}
-                    onClick={() => setCurrentPage(page)}
-                  >
-                    {page}
-                  </Button>
-                )
-              })}
-            </div>
-          </div>
+            rowLinkBase=""
+            rowRenderer={(row, key) =>
+              key === "caller" ? (
+                <DialogViewCall
+                  trigger={
+                    <div className="hover:underline cursor-pointer font-semibold">
+                      {String(row["caller"])}
+                    </div>
+                  }
+                  data={row}
+                  onCreateLead={() => console.log("Lead created for", row.id)}
+                />
+              ) : (
+                String(row[key] ?? "")
+              )
+            }
+          />
         </div>
 
+        {/* Sticky Pagination */}
+        <div className="border-t pt-4 pb-6 flex justify-between items-center bg-white sticky bottom-0 z-10">
+          {/* Left: Rows per page */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="sm">
+                Rows: {rowsPerPage}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-32">
+              <div className="flex flex-col gap-1">
+                {[10, 20, 50].map((count) => (
+                  <Button
+                    key={count}
+                    variant={rowsPerPage === count ? "default" : "ghost"}
+                    size="sm"
+                    onClick={() => {
+                      setRowsPerPage(count)
+                      setCurrentPage(1)
+                    }}
+                  >
+                    {count}
+                  </Button>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
+
+          {/* Right: Pagination */}
+          <div className="flex gap-1 items-center">
+            {Array.from({ length: totalPages }).map((_, index) => {
+              const page = index + 1
+              return (
+                <Button
+                  key={page}
+                  size="sm"
+                  variant={page === currentPage ? "default" : "ghost"}
+                  onClick={() => setCurrentPage(page)}
+                >
+                  {page}
+                </Button>
+              )
+            })}
+          </div>
+        </div>
+      </div>
     </Layout>
   )
 }
