@@ -4,20 +4,19 @@ import { useState } from "react"
 import BreadcrumbNav from "@/components/bread-crumb-nav"
 import DynamicTable from "@/components/data-table"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 import { Layout } from "@/layout/Layout"
 
 import {
   Plus,
-  Filter,
   ArrowDownUp,
   LayoutGrid,
   RefreshCw,
 } from "lucide-react"
+import { PopOverFilter } from "@/components/pop-over-filter"
 
 const sampleData = [
   {
@@ -164,6 +163,15 @@ const sampleData = [
   },
 ]
 
+
+const filterData = [
+  "Name", "Response", "Time", "Date"
+]
+
+const opsData = [
+  "between", "equalTo", "Then"
+]
+
 export default function LeadsPage() {
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
@@ -201,33 +209,15 @@ export default function LeadsPage() {
 
         {/* Action Buttons */}
         <div className="flex items-center space-x-2">
-          <Button size="icon" variant="outline">
+          <Button size="icon" variant="ghost">
               <RefreshCw/>
           </Button>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="ghost" size="sm">
-                <Filter className="mr-2 h-4 w-4" />
-                Filter
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-40">
-              <div className="flex flex-col space-y-2">
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="new" />
-                  <Label htmlFor="new">New</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="urgent" />
-                  <Label htmlFor="urgent">Urgent</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="followup" />
-                  <Label htmlFor="followup">Follow-up</Label>
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
+
+          {/* Filter */}
+          <PopOverFilter
+          filterFields={filterData}
+          operators={opsData}
+          />
 
           <Button variant="ghost" size="sm">
             <ArrowDownUp className="mr-2 h-4 w-4" />
