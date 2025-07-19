@@ -9,10 +9,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Command, CommandInput, CommandItem, CommandList, CommandEmpty } from "@/components/ui/command"
 
 import { Layout } from "@/layout/Layout"
-import { Plus, ArrowDownUp, LayoutGrid, Check, ChevronsUpDown, RefreshCw } from "lucide-react"
+import { Plus, LayoutGrid, Check, ChevronsUpDown, RefreshCw } from "lucide-react"
 import DialogViewCall, { type CallLogItem } from "@/components/dialog-view-call"
 import { cn } from "@/lib/utils"
 import { PopOverFilter } from "@/components/pop-over-filter"
+import { SortButton } from "@/components/sort-button"
 
 const callLogsData: CallLogItem[] = [
   {
@@ -78,6 +79,9 @@ export default function CallLogsPage() {
 
   const telephonyOptions = ["Exotel", "Manual", "Twilio"]
 
+  const handleSort = () => {
+    console.log("sort: ")
+  }
   return (
     <Layout>
       {/* Header */}
@@ -150,10 +154,12 @@ export default function CallLogsPage() {
               operators={opsData}
           />
 
-          <Button variant="ghost" size="sm">
-            <ArrowDownUp className="mr-2 h-4 w-4" />
-            Sort
-          </Button>
+          <div>
+            <SortButton
+            sortData={filterData}
+            onSort={handleSort}
+            />
+          </div>
 
           <Button variant="ghost" size="sm">
             <LayoutGrid className="mr-2 h-4 w-4" />

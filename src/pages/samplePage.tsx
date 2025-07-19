@@ -1,4 +1,5 @@
 import { PopOverFilter } from "@/components/pop-over-filter";
+import { SortButton } from "@/components/sort-button";
 import { Layout } from "@/layout/Layout";
 
 
@@ -9,7 +10,20 @@ const filterData = [
 const opsData = [
   "between", "equalTo", "Then"
 ]
+
+const sortData = [
+  "Name", "Response", "Time", "Date"
+]
+
+
 function SamplePage() {
+
+  const handleSort = (field: string) => {
+    // Your sorting logic here based on field name
+    console.log("Sort by:", field)
+    // Sort your data however you want
+}
+
   return (
     <Layout>
 
@@ -22,6 +36,13 @@ function SamplePage() {
           <PopOverFilter
           filterFields={filterData}
           operators={opsData}
+          />
+        </div>
+
+        <div>
+          <SortButton
+          sortData={sortData}
+          onSort={handleSort}
           />
         </div>
         </div>
