@@ -16,6 +16,7 @@ import {
   Filter,
   ArrowDownUp,
   LayoutGrid,
+  RefreshCw,
 } from "lucide-react"
 
 const sampleData = [
@@ -75,7 +76,7 @@ const sampleData = [
     modified: "2024-01-13",
   },
   {
-    id: 5,
+    id: 6,
     name: "08597309950",
     status: "New",
     timeline: "NA",
@@ -86,7 +87,7 @@ const sampleData = [
     modified: "2024-01-13",
   },
   {
-    id: 5,
+    id: 7,
     name: "08597309950",
     status: "New",
     timeline: "NA",
@@ -97,7 +98,7 @@ const sampleData = [
     modified: "2024-01-13",
   },
   {
-    id: 5,
+    id: 8,
     name: "08597309950",
     status: "New",
     timeline: "NA",
@@ -108,7 +109,7 @@ const sampleData = [
     modified: "2024-01-13",
   },
   {
-    id: 5,
+    id: 9,
     name: "08597309950",
     status: "New",
     timeline: "NA",
@@ -119,7 +120,7 @@ const sampleData = [
     modified: "2024-01-13",
   },
   {
-    id: 5,
+    id: 10,
     name: "08597309950",
     status: "New",
     timeline: "NA",
@@ -130,7 +131,7 @@ const sampleData = [
     modified: "2024-01-13",
   },
   {
-    id: 5,
+    id: 11,
     name: "08597309950",
     status: "New",
     timeline: "NA",
@@ -141,7 +142,7 @@ const sampleData = [
     modified: "2024-01-13",
   },
   {
-    id: 5,
+    id: 12,
     name: "08597309950",
     status: "New",
     timeline: "NA",
@@ -151,7 +152,7 @@ const sampleData = [
     context: "Initial greeting and language preference",
     modified: "2024-01-13",
   },{
-    id: 5,
+    id: 13,
     name: "08597309950",
     status: "New",
     timeline: "NA",
@@ -200,6 +201,9 @@ export default function LeadsPage() {
 
         {/* Action Buttons */}
         <div className="flex items-center space-x-2">
+          <Button size="icon" variant="outline">
+              <RefreshCw/>
+          </Button>
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="ghost" size="sm">
